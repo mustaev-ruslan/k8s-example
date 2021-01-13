@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-example-deployment
+  labels:
+    app: k8s-example-app
+spec:
+  selector:
+    matchLabels:
+      project: k8s-example-selector
+  template:
+    metadata:
+      labels:
+        project: k8s-example-selector
+    spec:
+      containers:
+        - name: k8s-example-container
+          image: mustaev/k8s-example:latest
+          ports:
+            - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-example-service
+  labels:
+    env: dev
+    owner: mustaev
+spec:
+  selector:
+    project: k8s-example-selector
+  ports:
+    - name: app-listener
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: k8s-example-autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: k8s-example-deployment
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
