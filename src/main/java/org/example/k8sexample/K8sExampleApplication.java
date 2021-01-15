@@ -14,7 +14,7 @@ public class K8sExampleApplication {
 
     @GetMapping("/")
     public String hello() throws UnknownHostException {
-        return "Hello from k8s-example service on " + InetAddress.getLocalHost();
+        return "Helloo from k8s-example service on " + InetAddress.getLocalHost();
     }
 
     public static void main(String[] args) {
