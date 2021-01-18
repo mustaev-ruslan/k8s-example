@@ -19,7 +19,7 @@ public class K8sExampleApplication {
     public String hello() throws IOException {
         Path path = Paths.get("data", "fileTest.txt");
         String text = Files.readAllLines(path).get(0);
-        return "Hello from k8s-example service on " + InetAddress.getLocalHost() +
+        return "111Hello from k8s-example service on " + InetAddress.getLocalHost() +
                 "<br>Storage content: " + text;
     }
 
